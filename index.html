@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>ShaBuDash — Dashboard</title>
+    <link rel="stylesheet" href="dashPage.css" />
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="logo"><img src="icon/ShabuIcon.png"></div>
+            <div class="brand-text">
+                <strong>ShaBuDash</strong>
+            </div>
+        </div>
+
+        <nav class="nav">
+            <a class="nav-item active" href="#">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a class="nav-item" href="#">
+                <span class="nav-icon">📜</span>
+                <span class="nav-label">History</span>
+            </a>
+        </nav>
+    </aside>
+
+    <div class="main">
+        <header class="header">
+            <h1 class="title">Overview</h1>
+            <div class="status">
+                <span class="status-dot running"></span>
+                <span class="status-text">Running</span>
+            </div>
+        </header>
+
+        <main class="content">
+            <section class="top-row">
+                <div class="today-container">
+                    <h2 class="card-title">Today</h2>
+                    <div class="card today-card">
+                        <div class="items-grid">
+                            <div class="item-col">
+                                <div class="item-name">ไม้แดง(5)</div>
+                                <div class="item-count">30</div>
+                                <div class="item-price">150</div>
+                            </div>
+                            <div class="item-col">
+                                <div class="item-name">ไม้เขียว(10)</div>
+                                <div class="item-count">10</div>
+                                <div class="item-price">100</div>
+                            </div>
+                            <div class="item-col">
+                                <div class="item-name">ไม้ฟ้า(15)</div>
+                                <div class="item-count">10</div>
+                                <div class="item-price">150</div>
+                            </div>
+                            <div class="item-col">
+                                <div class="item-name">ถ้วย(5)</div>
+                                <div class="item-count">20</div>
+                                <div class="item-price">100</div>
+                            </div>
+                            <div class="item-col">
+                                <div class="item-name">ถุง(5)</div>
+                                <div class="item-count">30</div>
+                                <div class="item-price">150</div>
+                            </div>
+                        </div>
+
+                        <div class="total">Total Revenue: <strong>650 Bath</strong></div>
+                    </div>
+                </div>
+
+                <div class="ratio-container">
+                    <h2 class="card-title">Item Ratio</h2>
+                    <div class="card ratio-card">
+                        <div class="ratio-inner">
+                            <div class="date-pill">12/09/2025</div>
+                            <div class="items-ratio-grid">
+                                <div class="donut-placeholder" aria-hidden="true">
+                                    <svg viewBox="0 0 42 42" class="donut">
+                                        <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954"></circle>
+                                        <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954"></circle>
+                                        <circle class="donut-segment s1" cx="21" cy="21" r="15.91549430918954"
+                                            stroke-dasharray="30 70" stroke-dashoffset="25"></circle>
+                                        <circle class="donut-segment s2" cx="21" cy="21" r="15.91549430918954"
+                                            stroke-dasharray="20 80" stroke-dashoffset="-5"></circle>
+                                        <circle class="donut-segment s3" cx="21" cy="21" r="15.91549430918954"
+                                            stroke-dasharray="20 80" stroke-dashoffset="-35"></circle>
+                                        <circle class="donut-segment s4" cx="21" cy="21" r="15.91549430918954"
+                                            stroke-dasharray="15 85" stroke-dashoffset="-65"></circle>
+                                        <circle class="donut-segment s5" cx="21" cy="21" r="15.91549430918954"
+                                            stroke-dasharray="15 85" stroke-dashoffset="-90"></circle>
+                                    </svg>
+                                </div>
+
+                                <ul class="legend">
+                                    <li><span class="dot red"></span>ไม้แดง</li>
+                                    <li><span class="dot green"></span>ไม้เขียว</li>
+                                    <li><span class="dot blue"></span>ไม้ฟ้า</li>
+                                    <li><span class="dot purple"></span>ถ้วย</li>
+                                    <li><span class="dot pink"></span>ไม้ถุง</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="weekly-row">
+                <div class="card weekly-card">
+                    <h2 class="card-title">Weekly</h2>
+                    <div class="bars">
+                        <div class="bar">
+                            <div class="bar-fill red" style="height:60%"></div>
+                            <div class="bar-label">Monday</div>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill lightgreen" style="height:75%"></div>
+                            <div class="bar-label">Tuesday</div>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill green" style="height:80%"></div>
+                            <div class="bar-label">Wednesday</div>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill orange" style="height:70%"></div>
+                            <div class="bar-label">Thurday</div>
+                        </div>
+                        <div class="bar">
+                            <div class="bar-fill blue" style="height:78%"></div>
+                            <div class="bar-label">Friday</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

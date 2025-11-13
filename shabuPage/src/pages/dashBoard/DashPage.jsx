@@ -1,6 +1,6 @@
 import './DashPage.css';
 
-export function DashPage() {
+export function DashPage({ history, priceStick }) {
     return (
         <>
             <main className="content">

@@ -1,0 +1,35 @@
+.header {
+    padding: 33px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    background: transparent;
+}
+
+.title {
+    font-size: 25px;
+    margin: 0;
+    color: #1f2933;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.status-dot {
+    width: 15px;
+    height: 15px;
+    border-radius: 999px;
+    background: #c5cbd0;
+    display: inline-block;
+}
+
+.status-dot.running {
+    background: #2ecc71;
+    box-shadow: 0 0 0 6px rgba(46, 204, 113, 0.08);
+}

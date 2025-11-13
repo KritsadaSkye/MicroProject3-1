@@ -1,44 +1,26 @@
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { Today } from './Today.jsx';
 import './DashPage.css';
 
-export function DashPage({ history, priceStick }) {
+export function DashPage() {
+    const [todayItems, setTodayItems] = useState([]);
+
+    useEffect(() => {
+        const fetchingData = async () => {
+            const responsetTodayItems = await axios.get('/api/today-summary');
+
+            setTodayItems(responsetTodayItems.data);
+        }
+
+        fetchingData();
+    }, [])
+
     return (
         <>
             <main className="content">
                 <section className="top-row">
-                    <div className="today-container">
-                        <h2 className="card-title">Today</h2>
-                        <div className="card today-card">
-                            <div className="items-grid">
-                                <div className="item-col">
-                                    <div className="item-name">ไม้แดง(5)</div>
-                                    <div className="item-count">30</div>
-                                    <div className="item-price">150</div>
-                                </div>
-                                <div className="item-col">
-                                    <div className="item-name">ไม้เขียว(10)</div>
-                                    <div className="item-count">10</div>
-                                    <div className="item-price">100</div>
-                                </div>
-                                <div className="item-col">
-                                    <div className="item-name">ไม้ฟ้า(15)</div>
-                                    <div className="item-count">10</div>
-                                    <div className="item-price">150</div>
-                                </div>
-                                <div className="item-col">
-                                    <div className="item-name">ถ้วย(5)</div>
-                                    <div className="item-count">20</div>
-                                    <div className="item-price">100</div>
-                                </div>
-                                <div className="item-col">
-                                    <div className="item-name">ถุง(5)</div>
-                                    <div className="item-count">30</div>
-                                    <div className="item-price">150</div>
-                                </div>
-                            </div>
-
-                            <div className="total">Total Revenue: <strong>650 Bath</strong></div>
-                        </div>
-                    </div>
+                    <Today todayItems={todayItems} />
 
                     <div className="ratio-container">
                         <h2 className="card-title">Item Ratio</h2>

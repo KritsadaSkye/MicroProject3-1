@@ -9,22 +9,19 @@ import './App.css'
 
 function App() {
   const [history, setHistory] = useState([]);
-  const [priceStick, setPriceStick] = useState([]);
+  const [items, setItems] = useState([]);
 
   useEffect(() => {
     const fetchingData = async () => {
       const responseHistory = await axios.get('/api/history');
-      const responsePrice = await axios.get('/api/pricestick');
+      const responseItems = await axios.get('/api/items');
 
       setHistory(responseHistory.data);
-      setPriceStick(responsePrice.data);
+      setItems(responseItems.data);
     }
 
     fetchingData();
   }, [])
-
-  console.log(history);
-  console.log(priceStick);
 
   return (
     <>
@@ -34,8 +31,8 @@ function App() {
         <Header />
 
         <Routes>
-          <Route path="/" element={<DashPage history={history} priceStick={priceStick} />} />
-          <Route path="/history" element={<HistoryPage history={history} priceStick={priceStick} />} />
+          <Route path="/" element={<DashPage />} />
+          <Route path="/history" element={<HistoryPage history={history} items={items} />} />
         </Routes>
       </div>
     </>

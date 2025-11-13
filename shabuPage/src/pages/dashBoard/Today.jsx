@@ -1,12 +1,5 @@
 import { ItemToday } from "./ItemToday";
-
-function calculateTotalRevenue(todayItems) {
-    const totalRevenue = todayItems.reduce((total, item) => {
-        return total + (item.count * item.price);
-    }, 0);
-
-    return totalRevenue;
-}
+import { calculateTotalRevenue } from "../../utils/totalPrice.js";
 
 export function Today({ todayItems }) {
     const totalRevenue = calculateTotalRevenue(todayItems);

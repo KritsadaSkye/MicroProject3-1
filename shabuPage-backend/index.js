@@ -44,6 +44,7 @@ app.get('/history', async (req, res) => {
     }
 })
 
+
 app.get('/items', async (req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
@@ -87,33 +88,20 @@ app.get('/today-summary', async (req, res) => {
     }
 })
 
-app.get('/total-price', async (req, res) => {
+app.get('/today', async (req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
+        const todayResults = await conn.query('SELECT date FROM history WHERE date = CURDATE()');
 
-        const [menuItems] = await conn.query('SELECT * FROM items');
-        const [historyRows] = await conn.query('SELECT * FROM history ORDER BY date DESC LIMIT 1');
-        const latestHistory = historyRows[0];
 
-        const combinedData = menuItems.map((item) => {
-
-            const historyKey = keyMap[item.type];
-            const count = (latestHistory && historyKey) ? latestHistory[historyKey] : 0;
-
-            return {
-                name: item.type,
-                price: item.price,
-                count: count
-            };
-        });
-
-        await conn.end();
-        res.json(combinedData);
-
+        res.json(todayResults[0]);
     } catch (error) {
-        console.error('Error fetching today summary:', error.message);
-        res.status(500).json({ error: 'Error fetching data' });
+        console.error('Error fetching today:', error.message);
+        res.status(500).json({
+            error: 'Error fetching today'
+        });
     }
+    await conn.end();
 })
 
 

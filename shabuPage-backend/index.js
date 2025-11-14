@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
+const { totalPrice } = require('../shabuPage/src/utils/totalPrice');
 
 const app = express();
 const port = 3301;
@@ -22,27 +23,42 @@ const keyMap = {
 app.get('/history', async (req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
-        const historyResults = await conn.query('SELECT * FROM history');
-        if (req.query.expand === 'items') {
 
-            const itemsResults = await conn.query('SELECT * FROM items');
+        const [menuItems] = await conn.query('SELECT * FROM items');
 
-            res.json({
-                history: historyResults[0],
-                items: itemsResults[0]
-            });
+        const [historyRows] = await conn.query('SELECT * FROM history ORDER BY date DESC LIMIT 30');
 
-        } else {
-            res.json(historyResults[0]);
-        }
+        const priceMap = {};
+        menuItems.forEach(item => {
+            const historyKey = keyMap[item.type];
+            if (historyKey) {
+                priceMap[historyKey] = item.price;
+            }
+        });
+
+        const enhancedHistory = historyRows.map((day) => {
+            let totalRevenueForThisDay = 0;
+
+            for (const historyKey in priceMap) {
+                const count = day[historyKey] || 0;
+                const price = priceMap[historyKey];
+
+                totalRevenueForThisDay += (count * price);
+            }
+            return {
+                ...day,
+                totalRevenue: totalRevenueForThisDay
+            };
+        });
+
         await conn.end();
+        res.json(enhancedHistory);
+
     } catch (error) {
         console.error('Error fetching history:', error.message);
-        res.status(500).json({
-            error: 'Error fetching history'
-        });
+        res.status(500).json({ error: 'Error fetching history' });
     }
-})
+});
 
 
 app.get('/items', async (req, res) => {

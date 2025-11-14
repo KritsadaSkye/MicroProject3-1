@@ -9,15 +9,13 @@ import './App.css'
 
 function App() {
   const [history, setHistory] = useState([]);
-  const [items, setItems] = useState([]);
+
 
   useEffect(() => {
     const fetchingData = async () => {
       const responseHistory = await axios.get('/api/history');
-      const responseItems = await axios.get('/api/items');
 
       setHistory(responseHistory.data);
-      setItems(responseItems.data);
     }
 
     fetchingData();
@@ -32,7 +30,7 @@ function App() {
 
         <Routes>
           <Route path="/" element={<DashPage />} />
-          <Route path="/history" element={<HistoryPage history={history} items={items} />} />
+          <Route path="/history" element={<HistoryPage history={history} />} />
         </Routes>
       </div>
     </>

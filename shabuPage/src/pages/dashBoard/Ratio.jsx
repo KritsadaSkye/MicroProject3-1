@@ -15,8 +15,6 @@ export function Ratio({ todayItems }) {
         fetchingData();
     }, [])
 
-    console.log(today);
-
     const totalCount = todayItems.reduce((sum, item) => sum + item.count, 0);
 
     const itemsWithPercent = todayItems.map(item => ({

@@ -29,7 +29,7 @@ function App() {
         <Header />
 
         <Routes>
-          <Route path="/" element={<DashPage />} />
+          <Route path="/" element={<DashPage history={history} />} />
           <Route path="/history" element={<HistoryPage history={history} />} />
         </Routes>
       </div>

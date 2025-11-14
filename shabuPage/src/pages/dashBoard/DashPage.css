@@ -138,20 +138,13 @@
 }
 
 .donut-segment.s2 {
-    stroke: #10b981
+    stroke: #daf34d
 }
 
 .donut-segment.s3 {
-    stroke: #3b82f6
+    stroke: #00b5fc
 }
 
-.donut-segment.s4 {
-    stroke: #7c3aed
-}
-
-.donut-segment.s5 {
-    stroke: #f472b6
-}
 
 .legend {
     white-space: nowrap;
@@ -208,8 +201,10 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
     align-items: center;
-    gap: 10px
+    gap: 10px;
+    height: 200px;
 }
 
 .bar-fill {
@@ -217,7 +212,6 @@
     border-radius: 8px 8px 0 0;
     background: #cbd5e1;
     transition: height .3s ease;
-    padding-top: 100%;
 }
 
 .bar-label {
@@ -226,9 +220,34 @@
     margin-top: 8px
 }
 
-.bar-fill.blue {
-    background: #3b82f6
+.bar-fill.Sun {
+    background: #d4f63b
 }
+
+.bar-fill.Mon {
+    background: #f63b3b
+}
+
+.bar-fill.Tue {
+    background: #41f63b
+}
+
+.bar-fill.Wed {
+    background: #cc00ff
+}
+
+.bar-fill.Thu {
+    background: #f87e0b
+}
+
+.bar-fill.Fri {
+    background: #00ccff
+}
+
+.bar-fill.Sat {
+    background: #ff00b3
+}
+
 
 @media (max-width: 980px) {
     .top-row {

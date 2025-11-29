@@ -1,6 +1,5 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
-const { totalPrice } = require('../shabuPage/src/utils/totalPrice');
 
 const app = express();
 const port = 3301;
@@ -120,8 +119,43 @@ app.get('/today', async (req, res) => {
     await conn.end();
 })
 
-
 app.listen(port, (req, res) => {
     console.log(`Server is running on http://localhost:${port}`);
 })
 
+/*raspy part*/
+
+app.post("/api/history", async (req, res) => {
+    const { color, count } = req.body;
+
+    await pool.query(
+        "INSERT INTO history (color, count, created_at) VALUES (?, ?, NOW())",
+        [color, count]
+    );
+
+    res.json({ message: "Inserted" });
+});
+
+
+app.get("/api/history/today", async (req, res) => {
+    const [rows] = await pool.query(`
+    SELECT color, SUM(count) AS total
+    FROM history
+    WHERE DATE(created_at) = CURDATE()
+    GROUP BY color
+  `);
+
+    res.json(rows);
+});
+
+app.put("/api/prices/:color", async (req, res) => {
+    const { color } = req.params;
+    const { price } = req.body;
+
+    await pool.query("UPDATE prices SET price = ? WHERE color = ?", [
+        price,
+        color
+    ]);
+
+    res.json({ message: "Updated" });
+});

@@ -47,7 +47,6 @@
     font-weight: 500;
 }
 
-/* Make sure horizontal scroll is smooth */
 .table-container::-webkit-scrollbar {
     height: 8px;
 }

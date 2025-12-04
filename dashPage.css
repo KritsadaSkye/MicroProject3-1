@@ -314,7 +314,6 @@ body {
     margin-right: 10px;
 }
 
-/* weekly */
 .weekly-row {
     margin-top: 8px
 }
@@ -355,7 +354,6 @@ body {
     margin-top: 8px
 }
 
-/* small screens */
 @media (max-width: 980px) {
     .sidebar {
         position: relative;

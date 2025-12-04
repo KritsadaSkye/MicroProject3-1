@@ -5,11 +5,11 @@ const app = express();
 const port = 3301;
 
 const dbConfig = {
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: 'root',
     database: 'shabudash',
-    port: 3307
+    port: 3306
 };
 
 const keyMap = {
@@ -23,9 +23,9 @@ app.get('/history', async (req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
 
-        const [menuItems] = await conn.query('SELECT * FROM items');
+        const [menuItems] = await conn.query('SELECT * FROM shabudash.items');
 
-        const [historyRows] = await conn.query('SELECT * FROM history ORDER BY date DESC LIMIT 30');
+        const [historyRows] = await conn.query('SELECT * FROM shabudash.history ORDER BY date DESC LIMIT 30');
 
         const priceMap = {};
         menuItems.forEach(item => {
@@ -63,7 +63,7 @@ app.get('/history', async (req, res) => {
 app.get('/items', async (req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
-        const results = await conn.query('SELECT * FROM items');
+        const results = await conn.query('SELECT * FROM shabudash.items');
         res.json(results[0]);
     } catch (error) {
         console.error('Error fetching history:', error.message);
@@ -78,8 +78,8 @@ app.get('/today-summary', async (req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
 
-        const [menuItems] = await conn.query('SELECT * FROM items');
-        const [historyRows] = await conn.query('SELECT * FROM history ORDER BY date DESC LIMIT 1');
+        const [menuItems] = await conn.query('SELECT * FROM shabudash.items');
+        const [historyRows] = await conn.query('SELECT * FROM shabudash.history ORDER BY date DESC LIMIT 1');
         const latestHistory = historyRows[0];
 
         const combinedData = menuItems.map((item) => {
@@ -88,6 +88,7 @@ app.get('/today-summary', async (req, res) => {
             const count = (latestHistory && historyKey) ? latestHistory[historyKey] : 0;
 
             return {
+                id: item.id,
                 name: item.type,
                 price: item.price,
                 count: count
@@ -106,7 +107,7 @@ app.get('/today-summary', async (req, res) => {
 app.get('/today', async (req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
-        const todayResults = await conn.query('SELECT date FROM history WHERE date = CURDATE()');
+        const todayResults = await conn.query('SELECT date FROM shabudash.history WHERE date = CURDATE()');
 
 
         res.json(todayResults[0]);

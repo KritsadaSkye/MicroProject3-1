@@ -309,7 +309,7 @@ body {
 .legend .dot {
     width: 15px;
     height: 15px;
-    border-radius: 4px;
+    border-radius: 10px;
     display: inline-block;
     margin-right: 10px;
 }

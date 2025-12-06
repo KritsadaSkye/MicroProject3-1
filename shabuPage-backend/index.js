@@ -1,5 +1,6 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
+const dayjs = require('dayjs')
 
 const app = express();
 const port = 3301;
@@ -18,6 +19,8 @@ const keyMap = {
     'ไม้ฟ้า': 'blueStick'
 };
 
+const today = dayjs().format('YYYY-MM-DD')
+console.log(today)
 
 app.get('/history', async (req, res) => {
     try {
@@ -82,21 +85,25 @@ app.get('/today-summary', async (req, res) => {
         const [historyRows] = await conn.query('SELECT * FROM shabudash.history ORDER BY date DESC LIMIT 1');
         const latestHistory = historyRows[0];
 
-        const combinedData = menuItems.map((item) => {
+        const latestHistoryDate = dayjs(latestHistory.date).format('YYYY-MM-DD')
 
-            const historyKey = keyMap[item.type];
-            const count = (latestHistory && historyKey) ? latestHistory[historyKey] : 0;
+        if (latestHistoryDate === today) {
+            const combinedData = menuItems.map((item) => {
 
-            return {
-                id: item.id,
-                name: item.type,
-                price: item.price,
-                count: count
-            };
-        });
+                const historyKey = keyMap[item.type];
+                const count = (latestHistory && historyKey) ? latestHistory[historyKey] : 0;
 
-        await conn.end();
-        res.json(combinedData);
+                return {
+                    id: item.id,
+                    name: item.type,
+                    price: item.price,
+                    count: count,
+                };
+            });
+
+            await conn.end();
+            res.json(combinedData);
+        }
 
     } catch (error) {
         console.error('Error fetching today summary:', error.message);

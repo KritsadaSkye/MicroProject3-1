@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import dayjs from "dayjs";
+import { Type } from "./Type"
 
 export function Ratio({ todayItems }) {
 
@@ -66,9 +67,10 @@ export function Ratio({ todayItems }) {
                         </div>
 
                         <ul className="legend">
-                            <li><span className="dot red"></span>ไม้แดง</li>
-                            <li><span className="dot yellow"></span>ไม้เหลือง</li>
-                            <li><span className="dot blue"></span>ไม้ฟ้า</li>
+                            {todayItems.map((todayItem) => {
+                                return (<Type key={todayItem.name} todayItem={todayItem} />)
+                            })
+                            }
                         </ul>
                     </div>
                 </div>

@@ -11,7 +11,8 @@ export function Today({ todayItems }) {
                 <div className="items-grid">
                     {todayItems.map((todayItem) => {
                         return (<ItemToday key={todayItem.name} todayItem={todayItem} />)
-                    })}
+                    })
+                    }
                 </div>
 
                 <div className="total">Total Revenue: <strong>{totalRevenue} Bath</strong></div>

@@ -24,6 +24,10 @@ export function Aside() {
                         <span className="nav-icon">📜</span>
                         <span className="nav-label">History</span>
                     </NavLink>
+                    <NavLink className="nav-item" to={"/management"}>
+                        <span className="nav-icon">📜</span>
+                        <span className="nav-label">Management</span>
+                    </NavLink>
                 </nav>
             </aside>
         </>

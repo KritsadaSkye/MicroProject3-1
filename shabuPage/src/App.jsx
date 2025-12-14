@@ -5,6 +5,7 @@ import { Aside } from './pages/component/Aside.jsx'
 import { Header } from './pages/component/Header.jsx'
 import { DashPage } from './pages/dashBoard/DashPage.jsx'
 import { HistoryPage } from './pages/history/HistoryPage.jsx'
+import { ManagementPage } from './pages/management/ManagementPage.jsx'
 import './App.css'
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Routes>
           <Route path="/" element={<DashPage history={history} />} />
           <Route path="/history" element={<HistoryPage history={history} />} />
+          <Route path="/management" element={<ManagementPage />} />
         </Routes>
       </div>
     </>

@@ -23,19 +23,18 @@ const today = dayjs().format('YYYY-MM-DD')
 console.log(today)
 
 app.get('/history', async (req, res) => {
-    try {
-        const conn = await mysql.createConnection(dbConfig);
+        try {
+            const conn = await mysql.createConnection(dbConfig);
+            const [menuItems] = await conn.query('SELECT * FROM shabudash.items');
 
-        const [menuItems] = await conn.query('SELECT * FROM shabudash.items');
+            const [historyRows] = await conn.query('SELECT * FROM shabudash.history ORDER BY date DESC LIMIT 30');
 
-        const [historyRows] = await conn.query('SELECT * FROM shabudash.history ORDER BY date DESC LIMIT 30');
-
-        const priceMap = {};
-        menuItems.forEach(item => {
-            const historyKey = keyMap[item.type];
-            if (historyKey) {
-                priceMap[historyKey] = item.price;
-            }
+            const priceMap = {};
+            menuItems.forEach(item => {
+                const historyKey = keyMap[item.type];
+                if (historyKey) {
+                    priceMap[historyKey] = item.price;
+                }
         });
 
         const enhancedHistory = historyRows.map((day) => {
@@ -80,7 +79,6 @@ app.get('/items', async (req, res) => {
 app.get('/today-summary', async (req, res) => {
     try {
         const conn = await mysql.createConnection(dbConfig);
-
         const [menuItems] = await conn.query('SELECT * FROM shabudash.items');
         const [historyRows] = await conn.query('SELECT * FROM shabudash.history ORDER BY date DESC LIMIT 1');
         const latestHistory = historyRows[0];
@@ -127,43 +125,42 @@ app.get('/today', async (req, res) => {
     await conn.end();
 })
 
+app.put("/api/prices/type", async (req, res) => {
+    const { type,price } = req.body;
+    try {
+        const conn = await mysql.createConnection(dbConfig);
+        await conn.query("UPDATE shabudash.items SET price = ? WHERE type = ?", [price, type]);
+        res.json({ message: `อัปเดตราคา ${type} เป็น ${price} บาทเรียบร้อย` });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 app.listen(port, (req, res) => {
     console.log(`Server is running on http://localhost:${port}`);
 })
 
+
 /*raspy part*/
 
+app.get("/api/get-items", async (req, res) => {
+    try {
+        const conn = await mysql.createConnection(dbConfig);
+        const [rows] = await conn.query("SELECT type, price FROM shabudash.items");
+        res.json(rows);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 app.post("/api/history", async (req, res) => {
+    const conn = await mysql.createConnection(dbConfig);
     const { color, count } = req.body;
 
-    await pool.query(
+    await conn.query(
         "INSERT INTO history (color, count, created_at) VALUES (?, ?, NOW())",
         [color, count]
     );
 
     res.json({ message: "Inserted" });
-});
-
-
-app.get("/api/history/today", async (req, res) => {
-    const [rows] = await pool.query(`
-    SELECT color, SUM(count) AS total
-    FROM history
-    WHERE DATE(created_at) = CURDATE()
-    GROUP BY color
-  `);
-
-    res.json(rows);
-});
-
-app.put("/api/prices/:color", async (req, res) => {
-    const { color } = req.params;
-    const { price } = req.body;
-
-    await pool.query("UPDATE prices SET price = ? WHERE color = ?", [
-        price,
-        color
-    ]);
-
-    res.json({ message: "Updated" });
 });

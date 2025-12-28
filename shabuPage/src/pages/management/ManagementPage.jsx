@@ -1,22 +1,29 @@
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { CardItem } from './CardItem.jsx';
 import './ManagementPage.css';
-import redStick from '../../../public/red_stick.png';
+
 
 export function ManagementPage() {
+
+    const [items, setItems] = useState([]);
+
+    const fetchingData = async () => {
+        const responseItems = await axios.get('/api/get-items');
+        setItems(responseItems.data);
+    }
+
+    useEffect(() => {
+        fetchingData();
+    }, [])
+
     return (
         <>
             <main className="Management-page">
-                <div className="item-card">
-                    <div className="item-image-container"><img src={redStick} /></div>
-                    <div className="item-name">ไม้แดง</div>
-                    <div className="item-price">ราคา 5 บาท</div>
-                </div>
-                <div className="item-card">
-                    fdsf
-                </div>
-                <div className="item-card">
-                    fdsf
-                </div>
-            </main>
+                {items.map((item) => {
+                    return <CardItem key={item.type} item={item} />
+                })}
+            </main >
         </>
     )
 }

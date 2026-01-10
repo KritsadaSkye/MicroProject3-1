@@ -11,7 +11,7 @@ The Raspberry Pi uses a camera to detect stick colors and sends the data to this
 1. Raspberry Pi detects stick colors using a camera  
 2. Each color represents a different price  
 3. Raspberry Pi sends the data to this web dashboard via REST API
-4. 
+
 ---
 
 ## 🛠️ Tech Stack

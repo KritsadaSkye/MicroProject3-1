@@ -16,8 +16,8 @@ The Raspberry Pi uses a camera to detect stick colors and sends the data to this
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** HTML, CSS, JavaScript , React
-- **Backend:** Node.js
-- **DataBase:** Mysql
-- **REST API**  
-- **Raspberry Pi**  
+- **Frontend:** HTML, CSS, JavaScript, React  
+- **Backend:** Node.js  
+- **Database:** MySQL  
+- **API:** REST API  
+- **Automation & Image Processing:** Python, OpenCV, NumPy  

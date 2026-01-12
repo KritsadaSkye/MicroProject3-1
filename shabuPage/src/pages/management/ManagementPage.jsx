@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { CardItem } from './CardItem.jsx';
 import './ManagementPage.css';
 
-
 export function ManagementPage() {
 
     const [items, setItems] = useState([]);
@@ -15,8 +14,10 @@ export function ManagementPage() {
 
     useEffect(() => {
         fetchingData();
-    }, [])
+    }, [items])
 
+
+    console.log(items);
     return (
         <>
             <main className="Management-page">

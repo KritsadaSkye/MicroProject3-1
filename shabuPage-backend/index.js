@@ -5,6 +5,9 @@ const dayjs = require('dayjs')
 const app = express();
 const port = 3301;
 
+// parse JSON bodies
+app.use(express.json());
+
 const dbConfig = {
     host: '127.0.0.1',
     user: 'root',
@@ -23,18 +26,18 @@ const today = dayjs().format('YYYY-MM-DD')
 console.log(today)
 
 app.get('/history', async (req, res) => {
-        try {
-            const conn = await mysql.createConnection(dbConfig);
-            const [menuItems] = await conn.query('SELECT * FROM shabudash.items');
+    try {
+        const conn = await mysql.createConnection(dbConfig);
+        const [menuItems] = await conn.query('SELECT * FROM shabudash.items');
 
-            const [historyRows] = await conn.query('SELECT * FROM shabudash.history ORDER BY date DESC LIMIT 30');
+        const [historyRows] = await conn.query('SELECT * FROM shabudash.history ORDER BY date DESC LIMIT 30');
 
-            const priceMap = {};
-            menuItems.forEach(item => {
-                const historyKey = keyMap[item.type];
-                if (historyKey) {
-                    priceMap[historyKey] = item.price;
-                }
+        const priceMap = {};
+        menuItems.forEach(item => {
+            const historyKey = keyMap[item.type];
+            if (historyKey) {
+                priceMap[historyKey] = item.price;
+            }
         });
 
         const enhancedHistory = historyRows.map((day) => {
@@ -125,13 +128,16 @@ app.get('/today', async (req, res) => {
     await conn.end();
 })
 
-app.put("/api/prices/type", async (req, res) => {
-    const { type,price } = req.body;
+app.put("/prices/type", async (req, res) => {
+    const { type, price } = req.body;
+    let conn;
     try {
-        const conn = await mysql.createConnection(dbConfig);
+        conn = await mysql.createConnection(dbConfig);
         await conn.query("UPDATE shabudash.items SET price = ? WHERE type = ?", [price, type]);
+        await conn.end();
         res.json({ message: `อัปเดตราคา ${type} เป็น ${price} บาทเรียบร้อย` });
     } catch (error) {
+        if (conn) await conn.end();
         res.status(500).json({ error: error.message });
     }
 });
@@ -143,24 +149,62 @@ app.listen(port, (req, res) => {
 
 /*raspy part*/
 
-app.get("/api/get-items", async (req, res) => {
+app.get("/get-items", async (req, res) => {
+    let conn;
     try {
-        const conn = await mysql.createConnection(dbConfig);
-        const [rows] = await conn.query("SELECT type, price FROM shabudash.items");
+        conn = await mysql.createConnection(dbConfig);
+        const [rows] = await conn.query("SELECT type, price, img FROM shabudash.items");
+        await conn.end();
         res.json(rows);
     } catch (error) {
+        if (conn) await conn.end();
         res.status(500).json({ error: error.message });
     }
 });
 
-app.post("/api/history", async (req, res) => {
-    const conn = await mysql.createConnection(dbConfig);
-    const { color, count } = req.body;
+app.post("/post-history", async (req, res) => {
+    let conn;
+    try {
+        conn = await mysql.createConnection(dbConfig);
+        const payload = req.body || {};
+        const targetDate = dayjs().format('YYYY-MM-DD');
 
-    await conn.query(
-        "INSERT INTO history (color, count, created_at) VALUES (?, ?, NOW())",
-        [color, count]
-    );
+        const allowedCols = ['redStick', 'yellowStick', 'blueStick'];
 
-    res.json({ message: "Inserted" });
+        const counts = {};
+        for (const col of allowedCols) {
+            if (Object.prototype.hasOwnProperty.call(payload, col)) {
+                counts[col] = parseInt(payload[col], 10) || 0;
+            }
+        }
+
+        if (Object.keys(counts).length === 0) {
+            await conn.end();
+            return res.status(400).json({ error: 'Invalid payload: expected keys redStick/yellowStick/blueStick with numeric values' });
+        }
+        const [existing] = await conn.query('SELECT date FROM shabudash.history WHERE date = ? LIMIT 1', [targetDate]);
+
+        if (existing.length) {
+            const updates = [];
+            const params = [];
+            for (const col of Object.keys(counts)) {
+                updates.push(`${col} = ${col} + ?`);
+                params.push(counts[col]);
+            }
+            params.push(targetDate);
+            await conn.query(`UPDATE shabudash.history SET ${updates.join(', ')} WHERE date = ?`, params);
+        } else {
+            const cols = ['date', ...Object.keys(counts)];
+            const placeholders = cols.map(() => '?').join(',');
+            const values = [targetDate, ...Object.values(counts)];
+            await conn.query(`INSERT INTO shabudash.history (${cols.join(',')}) VALUES (${placeholders})`, values);
+        }
+
+        await conn.end();
+        return res.json({ message: 'Inserted/Updated counts' });
+
+    } catch (error) {
+        if (conn) await conn.end();
+        return res.status(500).json({ error: error.message });
+    }
 });

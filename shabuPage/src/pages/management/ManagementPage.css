@@ -122,6 +122,8 @@ button {
 
 .update-price-input {
     padding: 5px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .confirm-button {
@@ -130,4 +132,10 @@ button {
 
 .cancel-button {
     background-color: #af4c4c;
+}
+
+button {
+    padding: 5px 10px;
+    font-size: 15px;
+    font-weight: bold;
 }

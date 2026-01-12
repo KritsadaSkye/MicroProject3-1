@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import redStick from '../../../public/red_stick.png';
+
 
 export function CardItem({ item }) {
 
@@ -9,7 +9,7 @@ export function CardItem({ item }) {
     const updatePrice = async () => {
         const response = await axios.put('/api/prices/type', {
             type: item.type,
-            price: price
+            price: price,
         });
         console.log(response.data);
     }
@@ -25,7 +25,7 @@ export function CardItem({ item }) {
     return (
         <>
             <div className="item-card">
-                <div className="item-image-container"><img src={redStick} /></div>
+                <div className="item-image-container"><img src={item.img} /></div>
                 <div className="items-details-container">
                     <div className="item-name">{item.type}</div>
                     <div className="item-price-edit-container">

@@ -183,6 +183,7 @@
     display: flex;
     gap: 32px;
     align-items: flex-end;
+    flex-direction: row-reverse;
     justify-content: space-between;
     padding: 22px;
     background: linear-gradient(180deg, rgba(241, 244, 247, 0.7), rgba(255, 255, 255, 0.5));
